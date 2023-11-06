@@ -56,7 +56,7 @@ func (l *defaultLicense) Validate(appPublicKey string) error {
 		return fmt.Errorf("invalid license signature")
 	}
 
-	var uData UserData
+	var uData LicenseData
 	if err := json.Unmarshal(l.licenseData.Data, &uData); err != nil {
 		return fmt.Errorf("decode license: %w", err)
 	}

@@ -52,32 +52,6 @@ func GetMACAddress() (string, error) {
 	return "00:00:00:00:00:00", nil
 }
 
-// CreateMachinePrivateKey - create a key unique for this machine
-/*func CreateMachinePrivateKey(salt string) (string, error) {
-	mac, err := GetMACAddress()
-	if err != nil {
-		return "", fmt.Errorf("get net address: %w", err)
-	}
-
-	keyHashed := swissknife.MD5([]byte(fmt.Sprintf(
-		"%s-%s", mac, salt,
-	)))
-	keyHashed = swissknife.MD5([]byte(keyHashed))
-
-	privateKey, err := lk.PrivateKeyFromHexString(keyHashed)
-	if err != nil {
-		return "", fmt.Errorf("create private key: %w", err)
-	}
-
-	privateKeyEncoded, err := privateKey.ToB32String()
-	if err != nil {
-		return "", fmt.Errorf("encode private key: %w", err)
-	}
-
-	return privateKeyEncoded, nil
-}
-*/
-
 func CreateNewKeypair() (Keypar, error) {
 	privateKey, err := lk.NewPrivateKey()
 	if err != nil {

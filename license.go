@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"time"
 
 	swissknife "github.com/Sagleft/swiss-knife"
 	"github.com/hyperboloide/lk"
@@ -70,13 +69,7 @@ func (l *defaultLicense) Validate(
 		return errors.New("app key does not match")
 	}
 
-	if licData.RegisteredUntil.Before(time.Now()) {
-		return fmt.Errorf(
-			"license expired on: %s",
-			licData.RegisteredUntil.Format(dateFormat),
-		)
-	}
-	return nil
+	return licData.CheckTime()
 }
 
 func (l *defaultLicense) GetData() (LicenseData, error) {

@@ -9,6 +9,7 @@ import (
 )
 
 const licFilePath = "license.dat"
+const appKey = "123-456-789"
 
 func main() {
 	privateKeyEncoded := "FD7YCAYBAEFXA22DN5XHIYLJNZSXEAP7QIAACAQBANIHKYQBBIAACAKEAH7YIAAAAAFP7AYFAEBP7BQAAAAP7GP7QIAWCBEMB36G5U7F3XBG2QGTGPDFJQM4XSD7PIUUF4V6YFFATDRATHN4ENNLO4RG2I5XXDV52BKV62N52II7IRNRNLCNUBR23U44XNP4OPSF2B7IOATBCIORSH543CIQLQGKDNKBWEHRJX2DKOJF4IEDF4JK6V6TAEYQEASJRURI4BWECN7QYMYAMBFKWW36YLQ5KS47NRWXPDL67HGFIFPPS7TG7M4B4GILZSRBSUS7N4FRIEAA===="
@@ -17,6 +18,7 @@ func main() {
 
 	lic := license.LicenseData{
 		Data:            "some user data",
+		AppKeyHash:      license.GetAppKeyHash(appKey),
 		RegisteredUntil: time.Now().Add(time.Second * 3),
 	}
 
@@ -32,7 +34,10 @@ func main() {
 	time.Sleep(time.Second * 4)
 	fmt.Println("expect error..")
 
-	if err := license.ValidateUserLicenseFile(licFilePath, publicKeyEncoded); err != nil {
+	if err := license.ValidateUserLicenseFile(
+		licFilePath,
+		publicKeyEncoded,
+	); err != nil {
 		log.Fatalln(err)
 	}
 	fmt.Println("OK!")

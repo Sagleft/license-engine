@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net"
 
+	swissknife "github.com/Sagleft/swiss-knife"
 	"github.com/hyperboloide/lk"
 )
 
@@ -67,4 +68,9 @@ func CreateNewKeypair() (Keypar, error) {
 		Public:  privateKey.GetPublicKey().ToB32String(),
 		Private: privateKeyEncoded,
 	}, nil
+}
+
+func GetAppKeyHash(appKey string) string {
+	keyHashed := swissknife.MD5([]byte(appKey))
+	return swissknife.MD5([]byte(keyHashed))
 }

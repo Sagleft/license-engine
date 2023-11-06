@@ -4,6 +4,7 @@ import "time"
 
 type LicenseData struct {
 	Data            any       `json:"data"`
+	AppKeyHash      string    `json:"appKeyHash"`
 	RegisteredUntil time.Time `json:"until"`
 }
 

@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"encoding/base32"
 	"encoding/gob"
+	"fmt"
+	"net"
 
 	"github.com/hyperboloide/lk"
 )
@@ -34,4 +36,35 @@ func toBytes(obj interface{}) ([]byte, error) {
 
 func EncodeKeyToBase32(key string) (string, error) {
 	return toB32String(key)
+}
+
+func GetMACAddress() (string, error) {
+	ifas, err := net.Interfaces()
+	if err != nil {
+		return "", fmt.Errorf("get net interfaces: %w", err)
+	}
+
+	for _, iface := range ifas {
+		if iface.Flags&net.FlagUp != 0 && iface.Flags&net.FlagLoopback == 0 {
+			return iface.HardwareAddr.String(), nil
+		}
+	}
+	return "00:00:00:00:00:00", nil
+}
+
+// CreateMachinePrivateKey - create a key unique for this machine
+func CreateMachinePrivateKey(salt string) (string, error) {
+	mac, err := GetMACAddress()
+	if err != nil {
+		return "", fmt.Errorf("get net address: %w", err)
+	}
+
+	privateKey, err := EncodeKeyToBase32(fmt.Sprintf(
+		"%s-%s", mac, salt,
+	))
+	if err != nil {
+		return "", fmt.Errorf("encode private key: %w", err)
+	}
+
+	return privateKey, nil
 }

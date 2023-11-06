@@ -68,13 +68,14 @@ func LoadFromFile(filepath string) (License, error) {
 func ValidateUserLicenseFile(
 	licenseFilePath string,
 	licensePrivateKey string,
+	appKeyHash string,
 ) error {
 	l, err := LoadFromFile(licenseFilePath)
 	if err != nil {
 		return fmt.Errorf("load: %w", err)
 	}
 
-	if err := l.Validate(licensePrivateKey); err != nil {
+	if err := l.Validate(appKeyHash, licensePrivateKey); err != nil {
 		return fmt.Errorf("validate: %w", err)
 	}
 	return nil

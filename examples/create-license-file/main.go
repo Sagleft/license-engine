@@ -16,9 +16,10 @@ func main() {
 
 	publicKeyEncoded := "ASGA57DO2PS53QTNIDJTHRSUYGOLZB7XUKKC6K7MCSQJRYQJTW6CGWVXOITNEO33R265AVK7NG65EEPUIWYWVRG2AY5N2OOLWX6HHZC5A7UHAJQREHIZD66NREIFYDFBWVA3CDYU35BVHES6ECBS6EVPK7JQ===="
 
+	appKeyHash := license.GetAppKeyHash(appKey)
 	lic := license.LicenseData{
 		Data:            "some user data",
-		AppKeyHash:      license.GetAppKeyHash(appKey),
+		AppKeyHash:      appKeyHash,
 		RegisteredUntil: time.Now().Add(time.Second * 3),
 	}
 
@@ -37,6 +38,7 @@ func main() {
 	if err := license.ValidateUserLicenseFile(
 		licFilePath,
 		publicKeyEncoded,
+		appKeyHash,
 	); err != nil {
 		log.Fatalln(err)
 	}

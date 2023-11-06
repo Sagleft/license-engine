@@ -14,7 +14,7 @@ const dateFormat = "2006-01-02"
 type License interface {
 	Encode() (string, error)
 	Save(filepath string) error
-	Validate(appPublicKey string) error
+	Validate(appKeyHashed, licensePublicKey string) error
 }
 
 type defaultLicense struct {
@@ -44,8 +44,11 @@ func (l *defaultLicense) Encode() (string, error) {
 	return licenseB32, nil
 }
 
-func (l *defaultLicense) Validate(appPublicKey string) error {
-	publicKey, err := lk.PublicKeyFromB32String(appPublicKey)
+func (l *defaultLicense) Validate(
+	appKeyHashed string,
+	licensePublicKey string,
+) error {
+	publicKey, err := lk.PublicKeyFromB32String(licensePublicKey)
 	if err != nil {
 		return fmt.Errorf("decode public key: %w", err)
 	}

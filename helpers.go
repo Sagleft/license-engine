@@ -78,16 +78,19 @@ func GetMACAddress() (string, error) {
 }
 */
 
-func CreateNewPrivateKey() (string, error) {
-	key, err := lk.NewPrivateKey()
+func CreateNewKeypair() (Keypar, error) {
+	privateKey, err := lk.NewPrivateKey()
 	if err != nil {
-		return "", fmt.Errorf("create key: %w", err)
+		return Keypar{}, fmt.Errorf("create key: %w", err)
 	}
 
-	keyEncoded, err := key.ToB32String()
+	privateKeyEncoded, err := privateKey.ToB32String()
 	if err != nil {
-		return "", fmt.Errorf("encode key: %w", err)
+		return Keypar{}, fmt.Errorf("encode key: %w", err)
 	}
 
-	return keyEncoded, nil
+	return Keypar{
+		Public:  privateKey.GetPublicKey().ToB32String(),
+		Private: privateKeyEncoded,
+	}, nil
 }

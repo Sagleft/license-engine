@@ -8,9 +8,13 @@ import (
 )
 
 func main() {
-	machinePrivateKey, err := license.CreateNewPrivateKey()
+	keypair, err := license.CreateNewKeypair()
 	if err != nil {
 		log.Fatalln(err)
 	}
-	fmt.Println("create private key:", machinePrivateKey)
+
+	fmt.Println("private key:", keypair.Private)
+	fmt.Println()
+	fmt.Println("public key:", keypair.Public)
+	fmt.Println()
 }

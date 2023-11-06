@@ -16,6 +16,7 @@ type License interface {
 	Encode() (string, error)
 	Save(filepath string) error
 	Validate(appKeyHashed, licensePublicKey string) error
+	GetData() (LicenseData, error)
 }
 
 type defaultLicense struct {
@@ -60,20 +61,28 @@ func (l *defaultLicense) Validate(
 		return fmt.Errorf("invalid license signature")
 	}
 
-	var uData LicenseData
-	if err := json.Unmarshal(l.licenseData.Data, &uData); err != nil {
-		return fmt.Errorf("decode license: %w", err)
+	licData, err := l.GetData()
+	if err != nil {
+		return fmt.Errorf("get license data: %w", err)
 	}
 
-	if uData.AppKeyHash != appKeyHashed {
+	if licData.AppKeyHash != appKeyHashed {
 		return errors.New("app key does not match")
 	}
 
-	if uData.RegisteredUntil.Before(time.Now()) {
+	if licData.RegisteredUntil.Before(time.Now()) {
 		return fmt.Errorf(
 			"license expired on: %s",
-			uData.RegisteredUntil.Format(dateFormat),
+			licData.RegisteredUntil.Format(dateFormat),
 		)
 	}
 	return nil
+}
+
+func (l *defaultLicense) GetData() (LicenseData, error) {
+	var licData LicenseData
+	if err := json.Unmarshal(l.licenseData.Data, &licData); err != nil {
+		return LicenseData{}, fmt.Errorf("decode data: %w", err)
+	}
+	return licData, nil
 }

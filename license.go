@@ -2,6 +2,7 @@ package license
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"time"
 
@@ -62,6 +63,10 @@ func (l *defaultLicense) Validate(
 	var uData LicenseData
 	if err := json.Unmarshal(l.licenseData.Data, &uData); err != nil {
 		return fmt.Errorf("decode license: %w", err)
+	}
+
+	if uData.AppKeyHash != appKeyHashed {
+		return errors.New("app key does not match")
 	}
 
 	if uData.RegisteredUntil.Before(time.Now()) {

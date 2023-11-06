@@ -8,10 +8,9 @@ import (
 )
 
 func main() {
-	salt := "test-123456789"
-	machinePrivateKey, err := license.CreateMachinePrivateKey(salt)
+	machinePrivateKey, err := license.CreateNewPrivateKey()
 	if err != nil {
 		log.Fatalln(err)
 	}
-	fmt.Println("use machine private key:", machinePrivateKey)
+	fmt.Println("create private key:", machinePrivateKey)
 }

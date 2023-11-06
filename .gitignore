@@ -20,3 +20,4 @@
 # Go workspace file
 go.work
 examples/create-key/create-key
+examples/create-license-file/license.dat
